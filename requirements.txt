@@ -1,0 +1,2 @@
+# Runtime: Python standard library only (Tkinter included with Windows Python).
+# Optional executable build: PyInstaller, see scripts/build_windows.bat.

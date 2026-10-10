@@ -8,7 +8,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from urllib.request import Request, urlopen
-from host import BridgeHost
+from host import BridgeHost\nfrom offline_planner import generate_offline_plan
 from remote_script.AbletonPromptBridge.protocol import SCHEMA, validate_plan
 
 OLLAMA = "http://127.0.0.1:11434/api/chat"
@@ -52,7 +52,7 @@ class App(tk.Tk):
         style.configure("TButton", padding=8)
         main = ttk.Frame(self, padding=22)
         main.pack(fill="both", expand=True)
-        ttk.Label(main, text="Ableton per Prompt", font=("Segoe UI", 23, "bold")).pack(anchor="w")
+        ttk.Label(main, text="Ableton per Prompt", font=("Helvetica", 23, "bold")).pack(anchor="w")
         ttk.Label(main, text="Auftrag eingeben → Vorschlag prüfen → in Live ausführen", font=("Segoe UI", 11)).pack(anchor="w", pady=(4, 12))
         row = ttk.Frame(main)
         row.pack(fill="x")
@@ -63,9 +63,9 @@ class App(tk.Tk):
         settings.pack(fill="x", pady=12)
         ttk.Label(settings, text="Ollama-Modell:").pack(side="left")
         self.model = ttk.Entry(settings, width=24)
-        self.model.insert(0, "qwen2.5:7b")
+        self.model.insert(0, "offline" if sys.platform == "darwin" else "qwen2.5:7b")
         self.model.pack(side="left", padx=8)
-        ttk.Label(settings, text="Lokale KI · kein Cloud-API-Schlüssel").pack(side="left")
+        ttk.Label(settings, text="Offline (Mac) oder Ollama · kein Cloud-API-Schlüssel").pack(side="left")
         self.prompt = tk.Text(main, height=5, wrap="word", font=("Segoe UI", 11))
         self.prompt.pack(fill="x")
         self.prompt.insert("1.0", "Erstelle eine MIDI-Spur namens Bass und setze das Tempo auf 118 BPM.")
@@ -76,7 +76,7 @@ class App(tk.Tk):
         self.execute_button = ttk.Button(buttons, text="In Live ausführen", state="disabled", command=self.execute)
         self.execute_button.pack(side="left", padx=10)
         ttk.Label(main, text="Vorschlag und genaue Aktionen", font=("Segoe UI", 11, "bold")).pack(anchor="w")
-        self.preview = tk.Text(main, height=13, wrap="word", font=("Consolas", 10), state="disabled")
+        self.preview = tk.Text(main, height=13, wrap="word", font=("Menlo", 10), state="disabled")
         self.preview.pack(fill="both", expand=True, pady=6)
         ttk.Label(main, text="Unterstützt: Spuren, Tempo, Solo/Mute/Arm, Lautstärke, MIDI-Clips und Parameter vorhandener Geräte.", wraplength=800).pack(anchor="w", pady=8)
         self.status = ttk.Label(main, text="Installiere die Brücke und wähle sie in Live unter Bedienoberfläche/Control Surface aus.", wraplength=800)
